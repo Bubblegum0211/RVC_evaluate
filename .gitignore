@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Pytest
+.pytest_cache/
+
+# Audio Files (user-provided, do not upload)
+original.wav
+*.wav
+
+# Model Files (large, user-provided)
+ecapa_model/
+*.ckpt
+*.pt
+*.pth
+
+# Results (auto-generated, do not upload)
+results/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Logs
+*.log
