@@ -1,0 +1,208 @@
+# ============================================================
+# RVC Voice Model Evaluator
+# Final Configuration
+# ============================================================
+
+# -------------------------
+# Input / Output
+# -------------------------
+original_audio: "./original.wav"
+models_dir: "./models"
+results_dir: "./results"
+
+# -------------------------
+# Audio
+# -------------------------
+audio:
+  sample_rate: 16000
+  mono: true
+
+  # Only analysis pipeline (MCD/Mel/MFCC/F0/ECAPA) may use normalization.
+  # Raw-quality pipeline (clipping detection, artifact metrics) always uses
+  # original amplitude — this setting does NOT affect artifact detection.
+  normalize_for_analysis: true
+
+# -------------------------
+# Windowing
+# -------------------------
+window:
+  seconds: 5.0
+  alignment_mode: "min_duration"
+  drop_incomplete_last_window: true
+  min_valid_window_seconds: 2.0
+
+# -------------------------
+# VAD
+# -------------------------
+vad:
+  enabled: true
+  min_speech_ratio: 0.05
+
+# -------------------------
+# ECAPA
+# -------------------------
+ecapa:
+  enabled: true
+  model_dir: "./ecapa_model"
+
+  # Fixed local model.
+  model_version: "FIXED_LOCAL_MODEL"
+
+  # Speaker similarity weight
+  weight: 0.40
+
+  # ECAPA internal score
+  mean_weight: 0.75
+  min_weight: 0.15
+
+# -------------------------
+# Acoustic / Timbre
+# -------------------------
+acoustic:
+  enabled: true
+  weight: 0.30
+
+  # True MCD
+  mcd_weight: 0.45
+
+  # Mel spectral distance
+  mel_weight: 0.35
+
+  # MFCC distance
+  mfcc_weight: 0.20
+
+  # DTW
+  use_dtw: true
+
+# -------------------------
+# Feature extraction
+# -------------------------
+features:
+  n_fft: 1024
+  hop_length: 256
+  win_length: 1024
+
+  n_mels: 80
+  n_mfcc: 20
+
+  fmin: 50
+  fmax: 7600
+
+# -------------------------
+# F0 / Prosody
+# -------------------------
+f0:
+  enabled: true
+  weight: 0.15
+
+  min_hz: 50
+  max_hz: 600
+
+  correlation_weight: 0.50
+  dtw_weight: 0.30
+  rmse_weight: 0.20
+
+  octave_correction: true
+
+# -------------------------
+# Stability
+# -------------------------
+stability:
+  enabled: true
+  weight: 0.10
+
+  # Window-level variance
+  use_window_score_std: true
+
+# -------------------------
+# Artifact / Quality
+# -------------------------
+artifacts:
+  enabled: true
+  weight: 0.05
+
+  clipping_weight: 0.25
+  spectral_flatness_weight: 0.30
+  high_frequency_weight: 0.25
+  harmonic_anomaly_weight: 0.20
+
+  # Artifact must include absolute thresholds,
+  # not only relative batch normalization.
+  use_absolute_thresholds: true
+
+# -------------------------
+# Final score
+# -------------------------
+final_score:
+  ecapa_weight: 0.40
+  acoustic_weight: 0.30
+  f0_weight: 0.15
+  stability_weight: 0.10
+  artifact_weight: 0.05
+
+# -------------------------
+# Self baseline
+# -------------------------
+self_baseline:
+  enabled: true
+  min_windows: 3
+
+# -------------------------
+# Normalization
+# -------------------------
+normalization:
+  method: "minmax"
+  relative_to_current_batch: true
+
+# -------------------------
+# Runtime
+# -------------------------
+runtime:
+  device: "auto"
+
+  # Suitable starting point for RTX 2070 8GB.
+  batch_size: 16
+
+  num_workers: 2
+
+# -------------------------
+# Reproducibility
+# -------------------------
+reproducibility:
+  seed: 42
+  deterministic: true
+
+# -------------------------
+# Output
+# -------------------------
+output:
+  save_csv: true
+  save_detailed_csv: true
+  save_excel: true
+  save_json: true
+  save_html: true
+
+  save_ranking_plot: true
+  save_radar_plot: true
+
+  save_top5_audio: true
+  save_comparison_audio: true
+
+  top_n: 5
+
+# -------------------------
+# Logging
+# -------------------------
+logging:
+  level: "INFO"
+  save_log: true
+
+# -------------------------
+# Human evaluation
+# -------------------------
+human_evaluation:
+  enabled: true
+
+  fields:
+    - human_rating
+    - human_notes
